@@ -1,1 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <title>AVIRA Admin</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    body{
+      margin:0;
+      font-family:Arial,sans-serif;
+      background:#faf7ff;
+      color:#211a27;
+    }
+
+    header{
+      background:white;
+      padding:20px;
+      border-bottom:1px solid #eee;
+      position:sticky;
+      top:0;
+    }
+
+    h1{
+      margin:0;
+      color:#7c4dff;
+    }
+
+    .container{
+      max-width:900px;
+      margin:auto;
+      padding:20px;
+    }
+
+    .card{
+      background:white;
+      border-radius:18px;
+      padding:18px;
+      margin:15px 0;
+      box-shadow:0 5px 25px rgba(0,0,0,.06);
+    }
+
+    .new{
+      border-left:5px solid #7c4dff;
+    }
+
+    .status{
+      display:inline-block;
+      padding:7px 12px;
+      border-radius:20px;
+      background:#eee5ff;
+      color:#6d3fd1;
+      font-size:13px;
+    }
+
+    button{
+      border:0;
+      border-radius:10px;
+      padding:10px 15px;
+      margin:5px;
+      cursor:pointer;
+      background:#7c4dff;
+      color:white;
+    }
+
+    .logout{
+      background:#222;
+    }
+
+    .empty{
+      text-align:center;
+      padding:40px;
+      color:#777;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>AVIRA Admin 👑</h1>
+</header>
+
+<div class="container">
+
+  <div id="loginBox" class="card">
+    <h2>Admin Login</h2>
+
+    <input id="email"
+      type="email"
+      placeholder="Admin email"
+      style="width:100%;padding:12px;margin:8px 0;box-sizing:border-box">
+
+    <input id="password"
+      type="password"
+      placeholder="Password"
+      style="width:100%;padding:12px;margin:8px 0;box-sizing:border-box">
+
+    <button onclick="login()">Login</button>
+
+    <p id="loginMsg"></p>
+  </div>
+
+  <div id="dashboard" style="display:none">
+
+    <button class="logout" onclick="logout()">Logout</button>
+
+    <h2>Orders</h2>
+
+    <div id="orders">
+      <div class="empty">Loading orders...</div>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+
+const SUPABASE_URL = "PASTE_YOUR_PROJECT_URL_HERE";
+const SUPABASE_KEY = "PASTE_YOUR_PUBLISHABLE_KEY_HERE";
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+
+async function login(){
+
+  const email =
+    document.getElementById("email").value;
+
+  const password =
+    document.getElementById("password").value;
+
+  const {error} =
+    await supabaseClient.auth.signInWithPassword({
+      email,
+      password
+    });
+
+  if(error){
+
+    document.getElementById("loginMsg").innerText =
+      error.message;
+
+    return;
+  }
+
+  showDashboard();
+}
+
+
+async function showDashboard(){
+
+  document.getElementById("loginBox")
+    .style.display="none";
+
+  document.getElementById("dashboard")
+    .style.display="block";
+
+  loadOrders();
+}
+
+
+async function loadOrders(){
+
+  const {data,error} =
+    await supabaseClient
+      .from("orders")
+      .select("*")
+      .order("created_at",{ascending:false});
+
+  if(error){
+
+    document.getElementById("orders").innerHTML =
+      `<div class="card">Error: ${error.message}</div>`;
+
+    return;
+  }
+
+  if(!data || data.length===0){
+
+    document.getElementById("orders").innerHTML =
+      `<div class="empty">
+        No orders yet 🛍️
+      </div>`;
+
+    return;
+  }
+
+  document.getElementById("orders").innerHTML =
+    data.map(order => `
+
+      <div class="card ${order.status==="Placed"?"new":""}">
+
+        <h3>Order #${order.id.slice(0,8)}</h3>
+
+        <p>
+          <b>Customer:</b>
+          ${order.customer_name}
+        </p>
+
+        <p>
+          <b>Phone:</b>
+          ${order.phone}
+        </p>
+
+        <p>
+          <b>Address:</b>
+          ${order.address}
+        </p>
+
+        <p>
+          <b>Payment:</b>
+          ${order.payment_method}
+        </p>
+
+        <p>
+          <b>Total:</b>
+          ₹${order.total}
+        </p>
+
+        <p>
+          <span class="status">
+            ${
