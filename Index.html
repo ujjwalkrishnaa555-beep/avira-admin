@@ -9,223 +9,1159 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
-    body{
-      margin:0;
-      font-family:Arial,sans-serif;
-      background:#faf7ff;
-      color:#211a27;
+    :root {
+      --lavender: #8B5CF6;
+      --lavender-dark: #6D3FD1;
+      --lavender-light: #F0E9FF;
+      --lavender-bg: #FAF8FF;
+      --white: #FFFFFF;
+      --text: #241B2F;
+      --muted: #81778B;
+      --border: #E9E1F5;
+      --danger: #E85D75;
+      --success: #45A66A;
     }
 
-    header{
-      background:white;
-      padding:20px;
-      border-bottom:1px solid #eee;
-      position:sticky;
-      top:0;
+    * {
+      box-sizing: border-box;
     }
 
-    h1{
-      margin:0;
-      color:#7c4dff;
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--lavender-bg);
+      color: var(--text);
     }
 
-    .container{
-      max-width:900px;
-      margin:auto;
-      padding:20px;
+    /* HEADER */
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(15px);
+      border-bottom: 1px solid var(--border);
     }
 
-    .card{
-      background:white;
-      border-radius:18px;
-      padding:18px;
-      margin:15px 0;
-      box-shadow:0 5px 25px rgba(0,0,0,.06);
+    .header-inner {
+      max-width: 1050px;
+      margin: auto;
+      padding: 18px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
-    .new{
-      border-left:5px solid #7c4dff;
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
-    .status{
-      display:inline-block;
-      padding:7px 12px;
-      border-radius:20px;
-      background:#eee5ff;
-      color:#6d3fd1;
-      font-size:13px;
+    .brand-logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 13px;
+      background: linear-gradient(
+        135deg,
+        #A78BFA,
+        #7C3AED
+      );
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 20px;
+      box-shadow: 0 8px 20px rgba(139,92,246,.25);
     }
 
-    button{
-      border:0;
-      border-radius:10px;
-      padding:10px 15px;
-      margin:5px;
-      cursor:pointer;
-      background:#7c4dff;
-      color:white;
+    .brand-name {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--lavender-dark);
+      letter-spacing: 1px;
     }
 
-    .logout{
-      background:#222;
+    .admin-text {
+      font-size: 12px;
+      color: var(--muted);
     }
 
-    .empty{
-      text-align:center;
-      padding:40px;
-      color:#777;
+    /* MAIN */
+
+    .container {
+      max-width: 1050px;
+      margin: auto;
+      padding: 25px 18px 50px;
+    }
+
+    /* LOGIN */
+
+    .login-card {
+      max-width: 430px;
+      margin: 60px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 24px;
+      border: 1px solid var(--border);
+      box-shadow: 0 15px 50px rgba(110,63,209,.10);
+    }
+
+    .login-icon {
+      width: 65px;
+      height: 65px;
+      margin: auto;
+      border-radius: 20px;
+      background: var(--lavender-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+    }
+
+    .login-card h2 {
+      text-align: center;
+      margin-bottom: 7px;
+    }
+
+    .login-card .subtitle {
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 25px;
+    }
+
+    /* INPUT */
+
+    .input-group {
+      margin-bottom: 14px;
+    }
+
+    .input-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    input,
+    select {
+      width: 100%;
+      border: 1px solid var(--border);
+      background: white;
+      border-radius: 12px;
+      padding: 13px;
+      font-size: 15px;
+      outline: none;
+      color: var(--text);
+    }
+
+    input:focus,
+    select:focus {
+      border-color: var(--lavender);
+      box-shadow: 0 0 0 3px rgba(139,92,246,.10);
+    }
+
+    /* BUTTONS */
+
+    button {
+      border: none;
+      border-radius: 12px;
+      padding: 11px 17px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      transition: .2s;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+    }
+
+    .primary {
+      width: 100%;
+      margin-top: 8px;
+      background: linear-gradient(
+        135deg,
+        #9B6CFF,
+        #7C3AED
+      );
+      color: white;
+      box-shadow: 0 8px 20px rgba(124,58,237,.20);
+    }
+
+    .refresh {
+      background: var(--lavender-light);
+      color: var(--lavender-dark);
+    }
+
+    .logout {
+      background: #2D2633;
+      color: white;
+    }
+
+    .update {
+      background: var(--lavender);
+      color: white;
+    }
+
+    /* DASHBOARD TOP */
+
+    .dashboard-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .dashboard-title h2 {
+      margin: 0;
+      font-size: 28px;
+    }
+
+    .dashboard-title p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    /* STATS */
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .stat-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: 0 7px 25px rgba(80,50,120,.05);
+    }
+
+    .stat-icon {
+      font-size: 22px;
+    }
+
+    .stat-number {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--lavender-dark);
+      margin-top: 8px;
+    }
+
+    .stat-label {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 3px;
+    }
+
+    /* ORDER */
+
+    .order-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 20px;
+      margin-bottom: 15px;
+      box-shadow: 0 7px 25px rgba(80,50,120,.05);
+    }
+
+    .order-card.new {
+      border-left: 5px solid var(--lavender);
+    }
+
+    .order-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      padding-bottom: 15px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .order-id {
+      font-size: 17px;
+      font-weight: 800;
+    }
+
+    .status {
+      padding: 7px 13px;
+      border-radius: 30px;
+      background: var(--lavender-light);
+      color: var(--lavender-dark);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .order-details {
+      padding-top: 12px;
+    }
+
+    .detail {
+      margin: 9px 0;
+      line-height: 1.5;
+      font-size: 14px;
+    }
+
+    .detail b {
+      display: inline-block;
+      min-width: 85px;
+    }
+
+    .order-footer {
+      margin-top: 16px;
+      padding-top: 15px;
+      border-top: 1px solid var(--border);
+    }
+
+    .order-footer label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 7px;
+    }
+
+    .update-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .update-row select {
+      flex: 1;
+    }
+
+    .update-row button {
+      white-space: nowrap;
+    }
+
+    /* MESSAGES */
+
+    .message {
+      padding: 13px;
+      border-radius: 12px;
+      margin-top: 12px;
+      font-size: 14px;
+    }
+
+    .error {
+      background: #FFF0F2;
+      color: #C63D55;
+    }
+
+    .success {
+      background: #ECF9F0;
+      color: #287A49;
+    }
+
+    .empty {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--muted);
+      background: white;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+    }
+
+    .empty-icon {
+      font-size: 40px;
+      margin-bottom: 10px;
+    }
+
+    /* MOBILE */
+
+    @media (max-width: 650px) {
+
+      .container {
+        padding: 18px 12px 40px;
+      }
+
+      .header-inner {
+        padding: 14px;
+      }
+
+      .brand-name {
+        font-size: 19px;
+      }
+
+      .admin-text {
+        display: none;
+      }
+
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .dashboard-title h2 {
+        font-size: 24px;
+      }
+
+      .actions {
+        width: 100%;
+      }
+
+      .actions button {
+        flex: 1;
+      }
+
+      .update-row {
+        flex-direction: column;
+      }
+
+      .update-row button {
+        width: 100%;
+      }
+
+      .login-card {
+        margin: 30px auto;
+        padding: 22px;
+      }
     }
   </style>
 </head>
 
 <body>
 
+<!-- HEADER -->
+
 <header>
-  <h1>AVIRA Admin 👑</h1>
+  <div class="header-inner">
+
+    <div class="brand">
+
+      <div class="brand-logo">
+        A
+      </div>
+
+      <div>
+        <div class="brand-name">
+          AVIRA
+        </div>
+
+        <div class="admin-text">
+          Admin Dashboard
+        </div>
+      </div>
+
+    </div>
+
+  </div>
 </header>
+
 
 <div class="container">
 
-  <div id="loginBox" class="card">
-    <h2>Admin Login</h2>
+  <!-- LOGIN -->
 
-    <input id="email"
-      type="email"
-      placeholder="Admin email"
-      style="width:100%;padding:12px;margin:8px 0;box-sizing:border-box">
+  <div id="loginBox" class="login-card">
 
-    <input id="password"
-      type="password"
-      placeholder="Password"
-      style="width:100%;padding:12px;margin:8px 0;box-sizing:border-box">
+    <div class="login-icon">
+      👑
+    </div>
 
-    <button onclick="login()">Login</button>
+    <h2>Welcome Back</h2>
 
-    <p id="loginMsg"></p>
+    <div class="subtitle">
+      Login to manage your AVIRA store
+    </div>
+
+    <div class="input-group">
+
+      <label>Email</label>
+
+      <input
+        id="email"
+        type="email"
+        placeholder="Admin email"
+        autocomplete="email"
+      >
+
+    </div>
+
+    <div class="input-group">
+
+      <label>Password</label>
+
+      <input
+        id="password"
+        type="password"
+        placeholder="Password"
+        autocomplete="current-password"
+      >
+
+    </div>
+
+    <button
+      class="primary"
+      onclick="login()"
+    >
+      Login to Dashboard
+    </button>
+
+    <div id="loginMsg"></div>
+
   </div>
 
-  <div id="dashboard" style="display:none">
 
-    <button class="logout" onclick="logout()">Logout</button>
+  <!-- DASHBOARD -->
 
-    <h2>Orders</h2>
+  <div id="dashboard" style="display:none;">
+
+    <div class="dashboard-top">
+
+      <div class="dashboard-title">
+
+        <h2>Orders</h2>
+
+        <p>
+          Manage your AVIRA customer orders
+        </p>
+
+      </div>
+
+      <div class="actions">
+
+        <button
+          class="refresh"
+          onclick="loadOrders()"
+        >
+          🔄 Refresh
+        </button>
+
+        <button
+          class="logout"
+          onclick="logout()"
+        >
+          Logout
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- STATS -->
+
+    <div class="stats">
+
+      <div class="stat-card">
+
+        <div class="stat-icon">
+          🛍️
+        </div>
+
+        <div
+          id="totalOrders"
+          class="stat-number"
+        >
+          0
+        </div>
+
+        <div class="stat-label">
+          Total Orders
+        </div>
+
+      </div>
+
+
+      <div class="stat-card">
+
+        <div class="stat-icon">
+          ✨
+        </div>
+
+        <div
+          id="placedOrders"
+          class="stat-number"
+        >
+          0
+        </div>
+
+        <div class="stat-label">
+          New Orders
+        </div>
+
+      </div>
+
+
+      <div class="stat-card">
+
+        <div class="stat-icon">
+          📦
+        </div>
+
+        <div
+          id="deliveredOrders"
+          class="stat-number"
+        >
+          0
+        </div>
+
+        <div class="stat-label">
+          Delivered
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ORDERS -->
 
     <div id="orders">
-      <div class="empty">Loading orders...</div>
+
+      <div class="empty">
+
+        <div class="empty-icon">
+          🛍️
+        </div>
+
+        Loading orders...
+
+      </div>
+
     </div>
 
   </div>
 
 </div>
 
+
 <script>
 
-const SUPABASE_URL = "https://aflnzgfnpezrkcvgiqkz.supabase.co;
-const SUPABASE_KEY = "sb_publishable_1Pc12iP76X83KfQPGA4Suw_U4HkDnix;
+  /* ==============================
+     SUPABASE
+  ============================== */
 
-const supabaseClient =
-  window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-  );
+  const SUPABASE_URL =
+    "https://aflnzgfnpezrkcvgiqkz.supabase.co";
+
+  const SUPABASE_KEY =
+    "sb_publishable_1Pc12iP76X83KfQPGA4Suw_U4HkDnix";
+
+  const supabaseClient =
+    window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
 
 
-async function login(){
+  /* ==============================
+     ESCAPE HTML
+  ============================== */
 
-  const email =
-    document.getElementById("email").value;
+  function escapeHTML(value) {
 
-  const password =
-    document.getElementById("password").value;
+    if (
+      value === null ||
+      value === undefined
+    ) {
+      return "";
+    }
 
-  const {error} =
-    await supabaseClient.auth.signInWithPassword({
-      email,
-      password
-    });
-
-  if(error){
-
-    document.getElementById("loginMsg").innerText =
-      error.message;
-
-    return;
+    return String(value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
   }
 
-  showDashboard();
-}
+
+  /* ==============================
+     LOGIN
+  ============================== */
+
+  async function login() {
+
+    const email =
+      document
+        .getElementById("email")
+        .value
+        .trim();
+
+    const password =
+      document
+        .getElementById("password")
+        .value;
+
+    const message =
+      document.getElementById("loginMsg");
 
 
-async function showDashboard(){
+    if (!email || !password) {
 
-  document.getElementById("loginBox")
-    .style.display="none";
+      message.innerHTML = `
+        <div class="message error">
+          Please enter your email and password.
+        </div>
+      `;
 
-  document.getElementById("dashboard")
-    .style.display="block";
-
-  loadOrders();
-}
+      return;
+    }
 
 
-async function loadOrders(){
+    message.innerHTML = `
+      <div class="message">
+        Logging in...
+      </div>
+    `;
 
-  const {data,error} =
-    await supabaseClient
-      .from("orders")
-      .select("*")
-      .order("created_at",{ascending:false});
 
-  if(error){
+    const { error } =
+      await supabaseClient.auth.signInWithPassword({
+        email: email,
+        password: password
+      });
 
-    document.getElementById("orders").innerHTML =
-      `<div class="card">Error: ${error.message}</div>`;
 
-    return;
+    if (error) {
+
+      message.innerHTML = `
+        <div class="message error">
+          ${escapeHTML(error.message)}
+        </div>
+      `;
+
+      return;
+    }
+
+
+    message.innerHTML = "";
+
+    showDashboard();
   }
 
-  if(!data || data.length===0){
 
-    document.getElementById("orders").innerHTML =
-      `<div class="empty">
-        No orders yet 🛍️
-      </div>`;
+  /* ==============================
+     SHOW DASHBOARD
+  ============================== */
 
-    return;
+  function showDashboard() {
+
+    document.getElementById("loginBox")
+      .style.display = "none";
+
+    document.getElementById("dashboard")
+      .style.display = "block";
+
+    loadOrders();
   }
 
-  document.getElementById("orders").innerHTML =
-    data.map(order => `
 
-      <div class="card ${order.status==="Placed"?"new":""}">
+  /* ==============================
+     LOGOUT
+  ============================== */
 
-        <h3>Order #${order.id.slice(0,8)}</h3>
+  async function logout() {
 
-        <p>
-          <b>Customer:</b>
-          ${order.customer_name}
-        </p>
+    await supabaseClient.auth.signOut();
 
-        <p>
-          <b>Phone:</b>
-          ${order.phone}
-        </p>
+    document.getElementById("dashboard")
+      .style.display = "none";
 
-        <p>
-          <b>Address:</b>
-          ${order.address}
-        </p>
+    document.getElementById("loginBox")
+      .style.display = "block";
 
-        <p>
-          <b>Payment:</b>
-          ${order.payment_method}
-        </p>
+    document.getElementById("password")
+      .value = "";
+  }
 
-        <p>
-          <b>Total:</b>
-          ₹${order.total}
-        </p>
 
-        <p>
-          <span class="status">
-            ${
+  /* ==============================
+     SESSION CHECK
+  ============================== */
+
+  async function checkSession() {
+
+    const {
+      data: {
+        session
+      }
+    } =
+      await supabaseClient.auth.getSession();
+
+
+    if (session) {
+      showDashboard();
+    }
+  }
+
+
+  /* ==============================
+     LOAD ORDERS
+  ============================== */
+
+  async function loadOrders() {
+
+    const container =
+      document.getElementById("orders");
+
+
+    container.innerHTML = `
+      <div class="empty">
+        <div class="empty-icon">⏳</div>
+        Loading orders...
+      </div>
+    `;
+
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .from("orders")
+        .select("*")
+        .order(
+          "created_at",
+          {
+            ascending: false
+          }
+        );
+
+
+    if (error) {
+
+      container.innerHTML = `
+        <div class="message error">
+          <b>Could not load orders.</b><br>
+          ${escapeHTML(error.message)}
+        </div>
+      `;
+
+      return;
+    }
+
+
+    const orders = data || [];
+
+
+    updateStats(orders);
+
+
+    if (orders.length === 0) {
+
+      container.innerHTML = `
+        <div class="empty">
+
+          <div class="empty-icon">
+            🛍️
+          </div>
+
+          <h3>No orders yet</h3>
+
+          <p>
+            Customer orders will appear here.
+          </p>
+
+        </div>
+      `;
+
+      return;
+    }
+
+
+    container.innerHTML =
+      orders
+        .map(createOrderCard)
+        .join("");
+  }
+
+
+  /* ==============================
+     CREATE ORDER CARD
+  ============================== */
+
+  function createOrderCard(order) {
+
+    const id =
+      String(order.id || "");
+
+    const shortId =
+      id.substring(0, 8);
+
+    const status =
+      order.status || "Placed";
+
+
+    return `
+
+      <div class="order-card ${
+        status === "Placed" ? "new" : ""
+      }">
+
+        <div class="order-header">
+
+          <div class="order-id">
+            Order #${escapeHTML(shortId)}
+          </div>
+
+          <div class="status">
+            ${escapeHTML(status)}
+          </div>
+
+        </div>
+
+
+        <div class="order-details">
+
+          <div class="detail">
+            <b>Customer</b>
+            ${escapeHTML(order.customer_name)}
+          </div>
+
+          <div class="detail">
+            <b>Phone</b>
+            ${escapeHTML(order.phone)}
+          </div>
+
+          <div class="detail">
+            <b>Address</b>
+            ${escapeHTML(order.address)}
+          </div>
+
+          <div class="detail">
+            <b>Payment</b>
+            ${escapeHTML(order.payment_method)}
+          </div>
+
+          <div class="detail">
+            <b>Total</b>
+            ₹${escapeHTML(order.total)}
+          </div>
+
+          <div class="detail">
+            <b>Date</b>
+            ${formatDate(order.created_at)}
+          </div>
+
+        </div>
+
+
+        <div class="order-footer">
+
+          <label>
+            Update Order Status
+          </label>
+
+          <div class="update-row">
+
+            <select id="status-${escapeHTML(id)}">
+
+              <option value="Placed"
+                ${status === "Placed" ? "selected" : ""}>
+                Placed
+              </option>
+
+              <option value="Processing"
+                ${status === "Processing" ? "selected" : ""}>
+                Processing
+              </option>
+
+              <option value="Shipped"
+                ${status === "Shipped" ? "selected" : ""}>
+                Shipped
+              </option>
+
+              <option value="Delivered"
+                ${status === "Delivered" ? "selected" : ""}>
+                Delivered
+              </option>
+
+              <option value="Cancelled"
+                ${status === "Cancelled" ? "selected" : ""}>
+                Cancelled
+              </option>
+
+            </select>
+
+            <button
+              class="update"
+              onclick="updateStatus('${escapeJS(id)}')"
+            >
+              Update
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    `;
+  }
+
+
+  /* ==============================
+     UPDATE STATUS
+  ============================== */
+
+  async function updateStatus(orderId) {
+
+    const select =
+      document.getElementById(
+        "status-" + orderId
+      );
+
+
+    if (!select) {
+      return;
+    }
+
+
+    const newStatus =
+      select.value;
+
+
+    const {
+      error
+    } =
+      await supabaseClient
+        .from("orders")
+        .update({
+          status: newStatus
+        })
+        .eq("id", orderId);
+
+
+    if (error) {
+
+      alert(
+        "Update failed:\n" +
+        error.message
+      );
+
+      return;
+    }
+
+
+    await loadOrders();
+
+  }
+
+
+  /* ==============================
+     STATS
+  ============================== */
+
+  function updateStats(orders) {
+
+    const total =
+      orders.length;
+
+
+    const placed =
+      orders.filter(
+        order =>
+          (order.status || "Placed") === "Placed"
+      ).length;
+
+
+    const delivered =
+      orders.filter(
+        order =>
+          order.status === "Delivered"
+      ).length;
+
+
+    document.getElementById(
+      "totalOrders"
+    ).innerText = total;
+
+
+    document.getElementById(
+      "placedOrders"
+    ).innerText = placed;
+
+
+    document.getElementById(
+      "deliveredOrders"
+    ).innerText = delivered;
+  }
+
+
+  /* ==============================
+     DATE
+  ============================== */
+
+  function formatDate(date) {
+
+    if (!date) {
+      return "Unknown";
+    }
+
+
+    try {
+
+      return new Date(date)
+        .toLocaleString(
+          "en-IN",
+          {
+            dateStyle: "medium",
+            timeStyle: "short"
+          }
+        );
+
+    } catch {
+
+      return escapeHTML(date);
+
+    }
+  }
+
+
+  /* ==============================
+     JS ESCAPE
+  ============================== */
+
+  function escapeJS(value) {
+
+    return String(value)
+      .replace(/\\/g, "\\\\")
+      .replace(/'/g, "\\'")
+      .replace(/"/g, '\\"');
+  }
+
+
+  /* ==============================
+     ENTER TO LOGIN
+  ============================== */
+
+  document
+    .getElementById("password")
+    .addEventListener(
+      "keydown",
+      function(event) {
+
+        if (event.key === "Enter") {
+          login();
+        }
+
+      }
+    );
+
+
+  /* ==============================
+     START
+  ============================== */
+
+  checkSession();
+
+</script>
+
+</body>
+</html>
